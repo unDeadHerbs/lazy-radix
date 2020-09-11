@@ -5,5 +5,5 @@ benchmark:
 	cmake -E chdir "build" cmake -DCMAKE_BUILD_TYPE=Release ../
 	cmake --build "build" --config Release
 
-%.bin: %.cpp benchmark
-	clang++ $< -std=c++11 -isystem benchmark/include -Lbenchmark/build/src -lbenchmark -lpthread -o $@ -fsanitize=address -g
+bench.bin: bench.cpp lazy_radix.cpp
+	clang++ $^ -std=c++11 -isystem benchmark/include -Lbenchmark/build/src -lbenchmark -lpthread -o $@ -fsanitize=address -g
