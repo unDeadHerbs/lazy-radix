@@ -6,4 +6,4 @@ benchmark:
 	cmake --build "build" --config Release
 
 %.bin: %.cpp benchmark
-	clang++ $< -std=c++11 -isystem benchmark/include -Lbenchmark/build/src -lbenchmark -lpthread -o $@
+	clang++ $< -std=c++11 -isystem benchmark/include -Lbenchmark/build/src -lbenchmark -lpthread -o $@ -fsanitize=address -g
