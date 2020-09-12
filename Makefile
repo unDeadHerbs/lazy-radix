@@ -6,7 +6,7 @@ benchmark:
 	cmake --build "build" --config Release
 
 bench.bin: bench.cpp lazy_radix.cpp
-	clang++ $^ -std=c++11 -isystem benchmark/include -Lbenchmark/build/src -lbenchmark -lpthread -o $@ -fsanitize=address -g
+	clang++ $^ -std=c++11 -isystem benchmark/include -Lbenchmark/build/src -lbenchmark -lpthread -o $@ -O3
 
 test.bin: test.cpp lazy_radix.cpp
 	clang++ $^ -std=c++11 -isystem benchmark/include -Lbenchmark/build/src -lbenchmark -lpthread -o $@ -fsanitize=address -g

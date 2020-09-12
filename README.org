@@ -3,12 +3,12 @@ This is a sort algorithm that resembles radix sort if generators were
 returned, evaluating the next element in the final sequence as late as
 possible.
 
-More precisely, if a two bucket radix sort is run, elemnts that are
-put into the first bucket can be used in the second itteration of the
+More precisely, if a two bucket radix sort is run, elements that are
+put into the first bucket can be used in the second iteration of the
 sort without knowing the full content of the bucket and without
 knowing any of the second bucket.  To this end the first bucket can
-simply not exist, instead moving each elemnt directly down to the next
-itteration where in it would be placed in the second bucket (or the
+simply not exist, instead moving each element directly down to the next
+iteration where in it would be placed in the second bucket (or the
 output).  Each time an output is needed we move up the buckets until
 one is non-empty and move the elements of that bucket into their next
 iterations.   This is done all at once rather than as a generator.
@@ -19,7 +19,7 @@ iterations.   This is done all at once rather than as a generator.
   per iteration/layer and never against the other elements.  This
   removes the fundamental quadratic nature of sorting and allows us to
   be much more efficient.  More precisely, since each of the \[n\] numbers
-  is \[m\] bits there are a total of \[m*m\] comparisons performed
+  is \[m\] bits there are a total of \[m*n\] comparisons performed
   leading to a time complexity of \[O(n)\], much better than the
   standard \[O(n log(n))\] of other sorting algorithms.
 
