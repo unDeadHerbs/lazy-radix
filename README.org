@@ -1,0 +1,57 @@
+* Lazy Radix Sort
+This is a sort algorithm that resembles radix sort if generators were
+returned, evaluating the next element in the final sequence as late as
+possible.
+
+More precisely, if a two bucket radix sort is run, elemnts that are
+put into the first bucket can be used in the second itteration of the
+sort without knowing the full content of the bucket and without
+knowing any of the second bucket.  To this end the first bucket can
+simply not exist, instead moving each elemnt directly down to the next
+itteration where in it would be placed in the second bucket (or the
+output).  Each time an output is needed we move up the buckets until
+one is non-empty and move the elements of that bucket into their next
+iterations.   This is done all at once rather than as a generator.
+
+* Time Complexity
+  Since each element is moved to the same number of buckets as there
+  are ones in its binary, then each number is compared against once
+  per iteration/layer and never against the other elements.  This
+  removes the fundamental quadratic nature of sorting and allows us to
+  be much more efficient.  More precisely, since each of the \[n\] numbers
+  is \[m\] bits there are a total of \[m*m\] comparisons performed
+  leading to a time complexity of \[O(n)\], much better than the
+  standard \[O(n log(n))\] of other sorting algorithms.
+
+  Notably, I believe I've made a mistake, but I can't find it.
+
+  Bench-marking this against =std::sort= leads to this data set.
+
+  |---------+----------------------+---------------------|
+  | Numbers | Lazy Radix Time (ns) | std::sort Time (ns) |
+  |---------+----------------------+---------------------|
+  |       8 |              4378084 |          1017992364 |
+  |      16 |              4475694 |          1017999584 |
+  |      32 |              4565364 |          1018007014 |
+  |      64 |              4714555 |          1018017354 |
+  |     128 |              4979455 |          1018030484 |
+  |     256 |              5457885 |          1018053314 |
+  |     512 |              6349527 |          1018086604 |
+  |    1024 |              8027438 |          1018152434 |
+  |    2048 |             11069951 |          1018286924 |
+  |    4096 |             16673507 |          1018559956 |
+  |    8192 |             22159861 |          1019138425 |
+  |   16384 |             27275727 |          1020302737 |
+  |   32768 |             40635860 |          1022838000 |
+  |   65536 |             66710295 |          1028170644 |
+  |  131072 |            117298300 |          1039065746 |
+  |  262144 |            212515208 |          1062678366 |
+  |  524288 |            399169485 |          1111771230 |
+  | 1048576 |            754327386 |          1212412247 |
+  | 2097152 |           1435933798 |          1430115509 |
+  |---------+----------------------+---------------------|
+
+  TODO: Make that a graph.
+  
+  Something is wrong here since =std::sort= doesn't seem to change
+  with it's inputs, but lazy radix is still much faster.

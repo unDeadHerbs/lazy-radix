@@ -1,15 +1,17 @@
 #include <benchmark/benchmark.h>
 #include <cstdio>
 #include <random>
+#include <vector>
+#include <algorithm>
 
 #include "lazy_radix.h"
 
 std::random_device seed;
 std::mt19937 gen(seed());
 
-void lrbs_benchmark(benchmark::State& state) {
+void lazy_radix_bench(benchmark::State& state) {
   state.PauseTiming();
-  std::uniform_int_distribution<> rand(0, 100);
+  std::uniform_int_distribution<> rand(0, 1<<30);
   int* array = new int[state.range(0)];
   while (state.KeepRunning()) {
     for (int i = 0; i < state.range(0); i++)
@@ -23,5 +25,24 @@ void lrbs_benchmark(benchmark::State& state) {
   delete[] array;
 }
 
-BENCHMARK(lrbs_benchmark)->RangeMultiplier(2)->Range(8, 8<<10)->Complexity(benchmark::oN);
+BENCHMARK(lazy_radix_bench)->RangeMultiplier(2)->Range(8, 2<<20);
+//->Complexity(benchmark::oN);
+
+void std_sort_bench(benchmark::State& state) {
+  state.PauseTiming();
+  std::uniform_int_distribution<> rand(0, 1<<30);
+  int* array = new int[state.range(0)];
+  while (state.KeepRunning()) {
+    for (int i = 0; i < state.range(0); i++)
+      array[i] = rand(gen);
+    std::vector<int> v{array,array+state.range(0)};
+    state.ResumeTiming();
+    std::sort(v.begin(),v.end());
+    state.PauseTiming();
+    benchmark::DoNotOptimize(v);
+  }
+  delete[] array;
+}
+
+BENCHMARK(std_sort_bench)->RangeMultiplier(2)->Range(8, 2<<20);
 BENCHMARK_MAIN();
